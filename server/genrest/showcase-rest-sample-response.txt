@@ -20,6 +20,7 @@ Compliance (.google.showcase.v1beta1.Compliance):
 
 Echo (.google.showcase.v1beta1.Echo):
   .google.showcase.v1beta1.Echo.Echo[0] : POST: "/v1beta1/echo:echo"
+  .google.showcase.v1beta1.Echo.EchoHeaders[0] : POST: "/v1beta1/echo:echoheaders"
   .google.showcase.v1beta1.Echo.Expand[0] : POST: "/v1beta1/echo:expand"
   .google.showcase.v1beta1.Echo.Collect[0] : POST: "/v1beta1/echo:collect"
   .google.showcase.v1beta1.Echo.PagedExpand[0] : POST: "/v1beta1/echo:pagedExpand"
@@ -110,7 +111,7 @@ Shim "Echo" (.google.showcase.v1beta1.Echo)
   Imports:
     genprotopb: "github.com/googleapis/gapic-showcase/server/genproto" "github.com/googleapis/gapic-showcase/server/genproto"
     longrunningpb: "google.golang.org/genproto/googleapis/longrunning" "google.golang.org/genproto/googleapis/longrunning"
-  Handlers (8):
+  Handlers (9):
         POST                                 /v1beta1/echo:echo func Echo(request genprotopb.EchoRequest) (response genprotopb.EchoResponse) {}
 ["/" "v1beta1" "/" "echo" ":" "echo"]
 
@@ -126,6 +127,9 @@ Shim "Echo" (.google.showcase.v1beta1.Echo)
         POST                              /v1beta1/echo:collect func Collect(request genprotopb.EchoRequest) (response genprotopb.EchoResponse) {}
 ["/" "v1beta1" "/" "echo" ":" "collect"]
 
+        POST                          /v1beta1/echo:echoheaders func EchoHeaders(request genprotopb.EchoHeadersRequest) (response genprotopb.EchoHeadersResponse) {}
+["/" "v1beta1" "/" "echo" ":" "echoheaders"]
+
         POST                          /v1beta1/echo:pagedExpand func PagedExpand(request genprotopb.PagedExpandRequest) (response genprotopb.PagedExpandResponse) {}
 ["/" "v1beta1" "/" "echo" ":" "pagedExpand"]
 
@@ -138,7 +142,7 @@ Shim "Echo" (.google.showcase.v1beta1.Echo)
 ----------------------------------------
 Shim "Identity" (.google.showcase.v1beta1.Identity)
   Imports:
-    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    emptypb: "github.com/golang/protobuf/ptypes/empty" "github.com/golang/protobuf/ptypes/empty"
     genprotopb: "github.com/googleapis/gapic-showcase/server/genproto" "github.com/googleapis/gapic-showcase/server/genproto"
   Handlers (5):
          GET                                     /v1beta1/users func ListUsers(request genprotopb.ListUsersRequest) (response genprotopb.ListUsersResponse) {}
@@ -153,13 +157,13 @@ Shim "Identity" (.google.showcase.v1beta1.Identity)
        PATCH                       /v1beta1/{user.name=users/*} func UpdateUser(request genprotopb.UpdateUserRequest) (response genprotopb.User) {}
 ["/" "v1beta1" "/" {user.name = ["users" "/" *]}]
 
-      DELETE                            /v1beta1/{name=users/*} func DeleteUser(request genprotopb.DeleteUserRequest) (response emptypbpb.Empty) {}
+      DELETE                            /v1beta1/{name=users/*} func DeleteUser(request genprotopb.DeleteUserRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["users" "/" *]}]
 
 ----------------------------------------
 Shim "Messaging" (.google.showcase.v1beta1.Messaging)
   Imports:
-    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    emptypb: "github.com/golang/protobuf/ptypes/empty" "github.com/golang/protobuf/ptypes/empty"
     genprotopb: "github.com/googleapis/gapic-showcase/server/genproto" "github.com/googleapis/gapic-showcase/server/genproto"
     longrunningpb: "google.golang.org/genproto/googleapis/longrunning" "google.golang.org/genproto/googleapis/longrunning"
   Handlers (21):
@@ -217,19 +221,19 @@ Shim "Messaging" (.google.showcase.v1beta1.Messaging)
        PATCH     /v1beta1/{blurb.name=users/*/profile/blurbs/*} func UpdateBlurb(request genprotopb.UpdateBlurbRequest) (response genprotopb.Blurb) {}
 ["/" "v1beta1" "/" {blurb.name = ["users" "/" * "/" "profile" "/" "blurbs" "/" *]}]
 
-      DELETE                            /v1beta1/{name=rooms/*} func DeleteRoom(request genprotopb.DeleteRoomRequest) (response emptypbpb.Empty) {}
+      DELETE                            /v1beta1/{name=rooms/*} func DeleteRoom(request genprotopb.DeleteRoomRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["rooms" "/" *]}]
 
-      DELETE                   /v1beta1/{name=rooms/*/blurbs/*} func DeleteBlurb(request genprotopb.DeleteBlurbRequest) (response emptypbpb.Empty) {}
+      DELETE                   /v1beta1/{name=rooms/*/blurbs/*} func DeleteBlurb(request genprotopb.DeleteBlurbRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["rooms" "/" * "/" "blurbs" "/" *]}]
 
-      DELETE           /v1beta1/{name=users/*/profile/blurbs/*} func DeleteBlurb(request genprotopb.DeleteBlurbRequest) (response emptypbpb.Empty) {}
+      DELETE           /v1beta1/{name=users/*/profile/blurbs/*} func DeleteBlurb(request genprotopb.DeleteBlurbRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["users" "/" * "/" "profile" "/" "blurbs" "/" *]}]
 
 ----------------------------------------
 Shim "SequenceService" (.google.showcase.v1beta1.SequenceService)
   Imports:
-    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    emptypb: "github.com/golang/protobuf/ptypes/empty" "github.com/golang/protobuf/ptypes/empty"
     genprotopb: "github.com/googleapis/gapic-showcase/server/genproto" "github.com/googleapis/gapic-showcase/server/genproto"
   Handlers (3):
          GET         /v1beta1/{name=sequences/*/sequenceReport} func GetSequenceReport(request genprotopb.GetSequenceReportRequest) (response genprotopb.SequenceReport) {}
@@ -238,13 +242,13 @@ Shim "SequenceService" (.google.showcase.v1beta1.SequenceService)
         POST                                 /v1beta1/sequences func CreateSequence(request genprotopb.CreateSequenceRequest) (response genprotopb.Sequence) {}
 ["/" "v1beta1" "/" "sequences"]
 
-        POST                        /v1beta1/{name=sequences/*} func AttemptSequence(request genprotopb.AttemptSequenceRequest) (response emptypbpb.Empty) {}
+        POST                        /v1beta1/{name=sequences/*} func AttemptSequence(request genprotopb.AttemptSequenceRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["sequences" "/" *]}]
 
 ----------------------------------------
 Shim "Testing" (.google.showcase.v1beta1.Testing)
   Imports:
-    emptypbpb: "google.golang.org/protobuf/types/known/emptypb" "google.golang.org/protobuf/types/known/emptypb"
+    emptypb: "github.com/golang/protobuf/ptypes/empty" "github.com/golang/protobuf/ptypes/empty"
     genprotopb: "github.com/googleapis/gapic-showcase/server/genproto" "github.com/googleapis/gapic-showcase/server/genproto"
   Handlers (8):
          GET                                  /v1beta1/sessions func ListSessions(request genprotopb.ListSessionsRequest) (response genprotopb.ListSessionsResponse) {}
@@ -265,9 +269,9 @@ Shim "Testing" (.google.showcase.v1beta1.Testing)
         POST           /v1beta1/{name=sessions/*/tests/*}:check func VerifyTest(request genprotopb.VerifyTestRequest) (response genprotopb.VerifyTestResponse) {}
 ["/" "v1beta1" "/" {name = ["sessions" "/" * "/" "tests" "/" *]} ":" "check"]
 
-      DELETE                         /v1beta1/{name=sessions/*} func DeleteSession(request genprotopb.DeleteSessionRequest) (response emptypbpb.Empty) {}
+      DELETE                         /v1beta1/{name=sessions/*} func DeleteSession(request genprotopb.DeleteSessionRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["sessions" "/" *]}]
 
-      DELETE                 /v1beta1/{name=sessions/*/tests/*} func DeleteTest(request genprotopb.DeleteTestRequest) (response emptypbpb.Empty) {}
+      DELETE                 /v1beta1/{name=sessions/*/tests/*} func DeleteTest(request genprotopb.DeleteTestRequest) (response emptypb.Empty) {}
 ["/" "v1beta1" "/" {name = ["sessions" "/" * "/" "tests" "/" *]}]
 

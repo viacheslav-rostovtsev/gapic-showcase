@@ -15,7 +15,7 @@ import (
 
 	"os"
 
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	timestamppb "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 var StreamBlurbsInput genprotopb.StreamBlurbsRequest

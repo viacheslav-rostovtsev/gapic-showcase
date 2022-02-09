@@ -224,6 +224,11 @@
                 "Echo"
               ]
             },
+            "EchoHeaders": {
+              "methods": [
+                "EchoHeaders"
+              ]
+            },
             "Expand": {
               "methods": [
                 "Expand"
@@ -317,6 +322,11 @@
             "Echo": {
               "methods": [
                 "Echo"
+              ]
+            },
+            "EchoHeaders": {
+              "methods": [
+                "EchoHeaders"
               ]
             },
             "Expand": {

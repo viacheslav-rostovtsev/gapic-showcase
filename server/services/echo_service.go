@@ -51,6 +51,24 @@ func (s *echoServerImpl) Echo(ctx context.Context, in *pb.EchoRequest) (*pb.Echo
 	return &pb.EchoResponse{Content: in.GetContent(), Severity: in.GetSeverity()}, nil
 }
 
+func (s *echoServerImpl) EchoHeaders(ctx context.Context, in *pb.EchoHeadersRequest) (*pb.EchoHeadersResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(
+			codes.Unknown,
+			"Error parsing metadata")
+	}
+	var headerstr string
+    headerstr = "x-goog-request-params: "
+
+	values := md.Get("x-goog-request-params")
+	for _, value := range values {
+		headerstr += value
+	}
+
+	return &pb.EchoHeadersResponse{Headers: headerstr}, nil
+}
+
 func (s *echoServerImpl) Expand(in *pb.ExpandRequest, stream pb.Echo_ExpandServer) error {
 	for _, word := range strings.Fields(in.GetContent()) {
 		err := stream.Send(&pb.EchoResponse{Content: word})

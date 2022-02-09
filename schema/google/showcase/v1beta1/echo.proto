@@ -83,6 +83,23 @@ service Echo {
     };
   }
 
+  // This method simply echoes the request. This method showcases unary RPCs.
+  rpc EchoHeaders(EchoHeadersRequest) returns (EchoHeadersResponse) {
+    option (google.api.http) = {
+      post: "/v1beta1/echo:echoheaders"
+      body: "*"
+    };
+    option (google.api.routing) = {
+      routing_parameters { field: "table_name", path_template: "projects/*/{table_location=instances/*}/tables/*" }
+      routing_parameters { field: "table_name", path_template: "{table_location=regions/*/zones/*}/tables/*" }
+      routing_parameters { field: "table_name", path_template: "{routing_id=projects/*}/**" }
+      routing_parameters { field: "app_profile_id", path_template: "{routing_id=**}" }
+      routing_parameters { field: "app_profile_id", path_template: "profiles/{routing_id=*}" }
+      routing_parameters { field: "table_name", path_template: "subs/{sub.sub_name}" }
+      routing_parameters { field: "sub.header", path_template: "{legacy.header=**}" }
+    };
+  }
+
   // This method splits the given content into words and will pass each word back
   // through the stream. This method showcases server-side streaming RPCs.
   rpc Expand(ExpandRequest) returns (stream EchoResponse) {
@@ -204,6 +221,17 @@ message EchoResponse {
 
   // The severity specified in the request.
   Severity severity = 2;
+}
+
+message EchoHeadersRequest {
+  string table_name = 1;
+  string app_profile_id = 2;
+
+  EchoRequest sub = 3;
+}
+
+message EchoHeadersResponse {
+  string headers = 1;
 }
 
 // The request message for the Expand method.

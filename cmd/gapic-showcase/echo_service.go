@@ -18,6 +18,7 @@ var EchoConfig *viper.Viper
 var EchoClient *gapic.EchoClient
 var EchoSubCommands []string = []string{
 	"echo",
+	"echo-headers",
 	"expand",
 	"collect",
 	"chat",

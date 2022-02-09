@@ -52,6 +52,7 @@ var newEchoClientHook clientHook
 // EchoCallOptions contains the retry settings for each method of EchoClient.
 type EchoCallOptions struct {
 	Echo                    []gax.CallOption
+	EchoHeaders             []gax.CallOption
 	Expand                  []gax.CallOption
 	Collect                 []gax.CallOption
 	Chat                    []gax.CallOption
@@ -97,6 +98,7 @@ func defaultEchoCallOptions() *EchoCallOptions {
 				})
 			}),
 		},
+		EchoHeaders: []gax.CallOption{},
 		Expand: []gax.CallOption{
 			gax.WithRetry(func() gax.Retryer {
 				return gax.OnCodes([]codes.Code{
@@ -145,6 +147,7 @@ type internalEchoClient interface {
 	setGoogleClientInfo(...string)
 	Connection() *grpc.ClientConn
 	Echo(context.Context, *genprotopb.EchoRequest, ...gax.CallOption) (*genprotopb.EchoResponse, error)
+	EchoHeaders(context.Context, *genprotopb.EchoHeadersRequest, ...gax.CallOption) (*genprotopb.EchoHeadersResponse, error)
 	Expand(context.Context, *genprotopb.ExpandRequest, ...gax.CallOption) (genprotopb.Echo_ExpandClient, error)
 	Collect(context.Context, ...gax.CallOption) (genprotopb.Echo_CollectClient, error)
 	Chat(context.Context, ...gax.CallOption) (genprotopb.Echo_ChatClient, error)
@@ -213,6 +216,11 @@ func (c *EchoClient) Connection() *grpc.ClientConn {
 // Echo this method simply echoes the request. This method showcases unary RPCs.
 func (c *EchoClient) Echo(ctx context.Context, req *genprotopb.EchoRequest, opts ...gax.CallOption) (*genprotopb.EchoResponse, error) {
 	return c.internalClient.Echo(ctx, req, opts...)
+}
+
+// EchoHeaders this method simply echoes the request. This method showcases unary RPCs.
+func (c *EchoClient) EchoHeaders(ctx context.Context, req *genprotopb.EchoHeadersRequest, opts ...gax.CallOption) (*genprotopb.EchoHeadersResponse, error) {
+	return c.internalClient.EchoHeaders(ctx, req, opts...)
 }
 
 // Expand this method splits the given content into words and will pass each word back
@@ -513,6 +521,26 @@ func (c *echoGRPCClient) Echo(ctx context.Context, req *genprotopb.EchoRequest, 
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		var err error
 		resp, err = c.echoClient.Echo(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (c *echoGRPCClient) EchoHeaders(ctx context.Context, req *genprotopb.EchoHeadersRequest, opts ...gax.CallOption) (*genprotopb.EchoHeadersResponse, error) {
+	if _, ok := ctx.Deadline(); !ok && !c.disableDeadlines {
+		cctx, cancel := context.WithTimeout(ctx, 5000*time.Millisecond)
+		defer cancel()
+		ctx = cctx
+	}
+	ctx = insertMetadata(ctx, c.xGoogMetadata)
+	opts = append((*c.CallOptions).EchoHeaders[0:len((*c.CallOptions).EchoHeaders):len((*c.CallOptions).EchoHeaders)], opts...)
+	var resp *genprotopb.EchoHeadersResponse
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.echoClient.EchoHeaders(ctx, req, settings.GRPC...)
 		return err
 	}, opts...)
 	if err != nil {
@@ -941,6 +969,56 @@ func (c *echoRESTClient) Echo(ctx context.Context, req *genprotopb.EchoRequest, 
 	headers := buildHeaders(ctx, c.xGoogMetadata, metadata.Pairs("Content-Type", "application/json"))
 	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
 	resp := &genprotopb.EchoResponse{}
+	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
+		if err != nil {
+			return err
+		}
+		httpReq = httpReq.WithContext(ctx)
+		httpReq.Header = headers
+
+		httpRsp, err := c.httpClient.Do(httpReq)
+		if err != nil {
+			return err
+		}
+		defer httpRsp.Body.Close()
+
+		if err = googleapi.CheckResponse(httpRsp); err != nil {
+			return err
+		}
+
+		buf, err := ioutil.ReadAll(httpRsp.Body)
+		if err != nil {
+			return err
+		}
+
+		if err := unm.Unmarshal(buf, resp); err != nil {
+			return maybeUnknownEnum(err)
+		}
+
+		return nil
+	}, opts...)
+	if e != nil {
+		return nil, e
+	}
+	return resp, nil
+}
+
+// EchoHeaders this method simply echoes the request. This method showcases unary RPCs.
+func (c *echoRESTClient) EchoHeaders(ctx context.Context, req *genprotopb.EchoHeadersRequest, opts ...gax.CallOption) (*genprotopb.EchoHeadersResponse, error) {
+	m := protojson.MarshalOptions{AllowPartial: true}
+	jsonReq, err := m.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	baseUrl, _ := url.Parse(c.endpoint)
+	baseUrl.Path += fmt.Sprintf("/v1beta1/echo:echoheaders")
+
+	// Build HTTP headers from client and context metadata.
+	headers := buildHeaders(ctx, c.xGoogMetadata, metadata.Pairs("Content-Type", "application/json"))
+	unm := protojson.UnmarshalOptions{AllowPartial: true, DiscardUnknown: true}
+	resp := &genprotopb.EchoHeadersResponse{}
 	e := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
 		httpReq, err := http.NewRequest("POST", baseUrl.String(), bytes.NewReader(jsonReq))
 		if err != nil {

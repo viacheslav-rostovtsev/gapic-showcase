@@ -72,6 +72,26 @@ func ExampleEchoClient_Echo() {
 	_ = resp
 }
 
+func ExampleEchoClient_EchoHeaders() {
+	ctx := context.Background()
+	c, err := client.NewEchoClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	defer c.Close()
+
+	req := &genprotopb.EchoHeadersRequest{
+		// TODO: Fill request struct fields.
+		// See https://pkg.go.dev/github.com/googleapis/gapic-showcase/server/genproto#EchoHeadersRequest.
+	}
+	resp, err := c.EchoHeaders(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleEchoClient_Chat() {
 	ctx := context.Background()
 	c, err := client.NewEchoClient(ctx)

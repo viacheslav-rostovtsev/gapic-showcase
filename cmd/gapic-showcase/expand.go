@@ -5,7 +5,7 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	anypb "google.golang.org/protobuf/types/known/anypb"
+	anypb "github.com/golang/protobuf/ptypes/any"
 
 	"fmt"
 

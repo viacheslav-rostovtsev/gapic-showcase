@@ -5,7 +5,7 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	fieldmaskpb "google.golang.org/protobuf/types/known/fieldmaskpb"
+	field_maskpb "google.golang.org/genproto/protobuf/field_mask"
 
 	"fmt"
 
@@ -37,7 +37,7 @@ func init() {
 
 	UpdateBlurbInput.Blurb = new(genprotopb.Blurb)
 
-	UpdateBlurbInput.UpdateMask = new(fieldmaskpb.FieldMask)
+	UpdateBlurbInput.UpdateMask = new(field_maskpb.FieldMask)
 
 	UpdateBlurbCmd.Flags().StringVar(&UpdateBlurbInput.Blurb.Name, "blurb.name", "", "The resource name of the chat room.")
 

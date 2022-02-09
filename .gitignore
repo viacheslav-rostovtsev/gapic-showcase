@@ -8,3 +8,5 @@ bazel-*
 golint.txt
 gofmt.txt
 govet.txt
+cmd/
+

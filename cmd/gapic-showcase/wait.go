@@ -5,9 +5,9 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	anypb "google.golang.org/protobuf/types/known/anypb"
+	anypb "github.com/golang/protobuf/ptypes/any"
 
-	durationpb "google.golang.org/protobuf/types/known/durationpb"
+	durationpb "github.com/golang/protobuf/ptypes/duration"
 
 	"fmt"
 
@@ -19,7 +19,7 @@ import (
 
 	statuspb "google.golang.org/genproto/googleapis/rpc/status"
 
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
+	timestamppb "github.com/golang/protobuf/ptypes/timestamp"
 )
 
 var WaitInput genprotopb.WaitRequest
